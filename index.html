@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake & Ladder - Premium Edition</title>
+    <link rel="icon" href="https://files.catbox.moe/akvcbr.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 z-0 overflow-hidden">
+        <div class="floating-circle circle-1"></div>
+        <div class="floating-circle circle-2"></div>
+        <div class="floating-circle circle-3"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 min-h-screen p-4 md:p-6 lg:p-8">
+        <!-- Header -->
+        <div class="glass-card mb-6 p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                    🎲 Snake & Ladder
+                </h1>
+                <p class="text-gray-600 text-sm md:text-base mt-1">Premium Edition</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="instructionsBtn" class="btn-secondary px-3 py-2 rounded-xl text-sm">
+                    📖 Instructions
+                </button>
+                <button id="musicBtn" class="btn-secondary px-3 py-2 rounded-xl text-sm">
+                    🎵
+                </button>
+                <button id="restartBtn" class="btn-secondary px-3 py-2 rounded-xl text-sm">
+                    🔄 Restart
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+            <!-- Center - Board (Takes more space) -->
+            <div class="xl:col-span-3 order-1 xl:order-2">
+                <div class="glass-card p-4 md:p-6">
+                    <div id="board" class="board mx-auto"></div>
+                </div>
+            </div>
+            
+            <!-- Right Panel - Controls & Info -->
+            <div class="xl:col-span-1 order-2 xl:order-1 space-y-5">
+                <!-- Turn Info -->
+                <div class="glass-card p-4 md:p-5">
+                    <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-3">Current Turn</h2>
+                    <div id="currentTurn" class="player-indicator p-3 md:p-4 rounded-xl text-center"></div>
+                </div>
+
+                <!-- Dice -->
+                <div class="glass-card p-4 md:p-5 text-center">
+                    <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-3">Roll the Dice</h2>
+                    <div id="dice" class="dice mx-auto mb-3 cursor-pointer"></div>
+                    <button id="rollBtn" class="btn-primary w-full py-2.5 px-5 rounded-xl text-base md:text-lg font-semibold">
+                        🎲 Roll Dice
+                    </button>
+                    <p id="lastRoll" class="text-gray-600 mt-3 text-sm"></p>
+                </div>
+
+                <!-- Players -->
+                <div class="glass-card p-4 md:p-5">
+                    <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-3">Players</h2>
+                    <div id="playersContainer" class="space-y-2.5">
+                        <!-- Dynamic players will be added here -->
+                    </div>
+                </div>
+                
+                <!-- Snakes & Ladders -->
+                <div class="glass-card p-4 md:p-5">
+                    <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-3">🐍 Snakes & 🪜 Ladders</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <h3 class="text-sm font-semibold text-red-600 mb-2">Snakes</h3>
+                            <ul id="snakesList" class="text-sm text-gray-700 space-y-1"></ul>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-semibold text-blue-600 mb-2">Ladders</h3>
+                            <ul id="laddersList" class="text-sm text-gray-700 space-y-1"></ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Floating Music Control Panel -->
+        <div class="fixed bottom-6 right-6 z-40 glass-card p-4 rounded-2xl shadow-xl flex flex-col gap-3 w-64">
+            <h3 class="text-lg font-semibold text-gray-800 text-center">🎵 Music Controls</h3>
+            <div class="flex items-center justify-center gap-3">
+                <button id="playPauseBtn" class="btn-primary px-4 py-2 rounded-xl text-lg">
+                    🔇
+                </button>
+                <button id="restartMusicBtn" class="btn-secondary px-4 py-2 rounded-xl text-lg">
+                    🔄
+                </button>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-gray-700 font-medium">🔈</span>
+                <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.5" class="w-full accent-indigo-500">
+                <span class="text-gray-700 font-medium">🔊</span>
+            </div>
+            <div class="text-center text-sm text-gray-600">
+                Volume: <span id="volumeValue">50</span>%
+            </div>
+        </div>
+
+        <!-- History -->
+        <div class="glass-card mt-6 p-4 md:p-5">
+            <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-3">Move History</h2>
+            <div id="history" class="history-container max-h-40 md:max-h-48 overflow-y-auto space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- Player Count Modal -->
+    <div id="playerCountModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content glass-card p-6 md:p-8 text-center relative z-10 max-w-md w-full">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">🎮 Select Players</h2>
+            <p class="text-gray-600 mb-6">Kitne log khelenge?</p>
+            <div class="flex gap-4 justify-center mb-6">
+                <button class="player-count-btn btn-primary px-6 py-4 rounded-xl text-xl font-bold" data-count="2">2</button>
+                <button class="player-count-btn btn-secondary px-6 py-4 rounded-xl text-xl font-bold" data-count="3">3</button>
+                <button class="player-count-btn btn-secondary px-6 py-4 rounded-xl text-xl font-bold" data-count="4">4</button>
+            </div>
+            <button id="startGameBtn" class="btn-primary px-8 py-3 rounded-xl text-lg font-semibold" disabled>
+                Start Game
+            </button>
+        </div>
+    </div>
+
+    <!-- Winner Modal -->
+    <div id="winnerModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content glass-card p-8 text-center relative z-10">
+            <div id="confetti" class="confetti"></div>
+            <h2 class="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                🎉 Winner!
+            </h2>
+            <p id="winnerText" class="text-2xl text-gray-800 mb-6"></p>
+            <button id="newGameBtn" class="btn-primary px-8 py-3 rounded-xl text-lg font-semibold">
+                🎮 New Game
+            </button>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content glass-card p-6 md:p-8 max-w-2xl relative z-10 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800">📖 How to Play</h2>
+            <div class="text-left text-gray-700 space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-purple-600 mb-2">🎯 Objective</h3>
+                    <p>Be the first player to reach square 100!</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-purple-600 mb-2">🎲 Rules</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Player 1 starts first</li>
+                        <li>Players take turns rolling the dice</li>
+                        <li>Roll a 6 and get an extra turn!</li>
+                        <li>Need an exact roll to reach 100</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-purple-600 mb-2">🪜 Ladders</h3>
+                    <p>Land on a ladder to climb up quickly!</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-purple-600 mb-2">🐍 Snakes</h3>
+                    <p>Watch out for snakes - they'll slide you down!</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-purple-600 mb-2">⌨️ Shortcuts</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><kbd class="bg-gray-200 text-gray-800 px-2 py-1 rounded">Space</kbd> - Roll Dice</li>
+                        <li><kbd class="bg-gray-200 text-gray-800 px-2 py-1 rounded">M</kbd> - Toggle Sound</li>
+                        <li><kbd class="bg-gray-200 text-gray-800 px-2 py-1 rounded">R</kbd> - Restart Game</li>
+                        <li><kbd class="bg-gray-200 text-gray-800 px-2 py-1 rounded">I</kbd> - Toggle Instructions</li>
+                        <li><kbd class="bg-gray-200 text-gray-800 px-2 py-1 rounded">Escape</kbd> - Close Modals</li>
+                        <li><kbd class="bg-gray-200 text-gray-800 px-2 py-1 rounded">2/3/4</kbd> - Select Number of Players</li>
+                        <li><kbd class="bg-gray-200 text-gray-800 px-2 py-1 rounded">Enter</kbd> - Start Game</li>
+                    </ul>
+                </div>
+            </div>
+            <button id="closeInstructionsBtn" class="btn-primary w-full mt-6 px-6 py-3 rounded-xl text-lg font-semibold">
+                Got it!
+            </button>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://files.catbox.moe/h6t1fd.mp3" type="audio/mpeg">
+    </audio>
+    <script src="script.js"></script>
+</body>
+</html>
