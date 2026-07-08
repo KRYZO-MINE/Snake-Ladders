@@ -26,6 +26,21 @@ const LADDERS = {
     78: 98
 };
 
+// ========================
+// PLAYLIST DATA
+// ========================
+// Add your songs here: { title: "Song Name", url: "song-url.mp3"
+const PLAYLIST = [
+    { title: "Revenge Funk", url: "https://files.catbox.moe/h6t1fd.mp3" },
+    // Add more songs below like this:
+    { title: "Eternxlkz - SENTE MAIS", url: "https://files.catbox.moe/ydec20.mp3" },
+    { title: "Coldplay - Hymn of the Weekends", url: "https://files.catbox.moe/vgky6v.mp3" },
+    // { title: "Track 4", url: "your-song-link-4.mp3" },
+    // { title: "Track 5", url: "your-song-link-5.mp3" },
+    // { title: "Track 6", url: "your-song-link-6.mp3" },
+];
+let currentTrackIndex = 0;
+
 const PLAYER_COLORS = [
     { id: 1, color: '#ff6b6b', name: 'Player 1' },
     { id: 2, color: '#4ecdc4', name: 'Player 2' },
@@ -84,6 +99,9 @@ const elements = {
     bgMusic: document.getElementById('bgMusic'),
     playPauseBtn: document.getElementById('playPauseBtn'),
     restartMusicBtn: document.getElementById('restartMusicBtn'),
+    prevTrackBtn: document.getElementById('prevTrackBtn'),
+    nextTrackBtn: document.getElementById('nextTrackBtn'),
+    currentTrackTitle: document.getElementById('currentTrackTitle'),
     volumeSlider: document.getElementById('volumeSlider'),
     volumeValue: document.getElementById('volumeValue')
 };
@@ -575,6 +593,20 @@ function updateMusicUI() {
     }
 }
 
+function loadTrack(index) {
+    if (index < 0) {
+        currentTrackIndex = PLAYLIST.length - 1;
+    } else if (index >= PLAYLIST.length) {
+        currentTrackIndex = 0;
+    } else {
+        currentTrackIndex = index;
+    }
+    
+    const track = PLAYLIST[currentTrackIndex];
+    elements.currentTrackTitle.textContent = track.title;
+    elements.bgMusic.src = track.url;
+}
+
 function toggleMusic() {
     if (elements.bgMusic.paused) {
         elements.bgMusic.play().catch(err => console.log('Audio play failed:', err));
@@ -582,6 +614,22 @@ function toggleMusic() {
         elements.bgMusic.pause();
     }
     updateMusicUI();
+}
+
+function nextTrack() {
+    const wasPlaying = !elements.bgMusic.paused;
+    loadTrack(currentTrackIndex + 1);
+    if (wasPlaying) {
+        elements.bgMusic.play().catch(err => console.log('Audio play failed:', err));
+    }
+}
+
+function prevTrack() {
+    const wasPlaying = !elements.bgMusic.paused;
+    loadTrack(currentTrackIndex - 1);
+    if (wasPlaying) {
+        elements.bgMusic.play().catch(err => console.log('Audio play failed:', err));
+    }
 }
 
 function updateVolume() {
@@ -601,10 +649,16 @@ function restartMusic() {
 function setupMusicControls() {
     elements.playPauseBtn.addEventListener('click', toggleMusic);
     elements.restartMusicBtn.addEventListener('click', restartMusic);
+    elements.nextTrackBtn.addEventListener('click', nextTrack);
+    elements.prevTrackBtn.addEventListener('click', prevTrack);
     elements.volumeSlider.addEventListener('input', updateVolume);
     
-    // Initialize volume
+    // Auto-play next track when current ends
+    elements.bgMusic.addEventListener('ended', nextTrack);
+    
+    // Initialize volume and track
     updateVolume();
+    loadTrack(0);
 }
 
 // ========================
@@ -650,6 +704,24 @@ function setupEventListeners() {
             // Close all modals
             elements.instructionsModal.classList.add('hidden');
             elements.winnerModal.classList.add('hidden');
+        } else if (e.code === 'KeyA') {
+            // Previous track
+            prevTrack();
+        } else if (e.code === 'KeyD') {
+            // Next track
+            nextTrack();
+        } else if (e.key === '<' || e.key === ',') {
+            // Volume down
+            const currentVolume = parseFloat(elements.volumeSlider.value);
+            const newVolume = Math.max(0, currentVolume - 0.1);
+            elements.volumeSlider.value = newVolume;
+            updateVolume();
+        } else if (e.key === '>' || e.key === '.') {
+            // Volume up
+            const currentVolume = parseFloat(elements.volumeSlider.value);
+            const newVolume = Math.min(1, currentVolume + 0.1);
+            elements.volumeSlider.value = newVolume;
+            updateVolume();
         }
     });
     
