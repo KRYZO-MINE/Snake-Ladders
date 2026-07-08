@@ -108,6 +108,9 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    min-height: 44px;
+    min-width: 44px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary:hover {
@@ -131,6 +134,9 @@ body {
     border: 1px solid rgba(102, 126, 234, 0.3);
     cursor: pointer;
     transition: all 0.3s ease;
+    min-height: 44px;
+    min-width: 44px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-secondary:hover {
@@ -144,7 +150,7 @@ body {
 .board {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    gap: 4px;
+    gap: 2px;
     max-width: 650px;
     width: 100%;
     aspect-ratio: 1;
@@ -156,35 +162,67 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 4px;
     font-weight: bold;
-    font-size: 0.65rem;
+    font-size: 0.35rem;
     transition: all 0.3s ease;
     aspect-ratio: 1;
     color: #333;
+    padding: 2px;
 }
 
 .cell-number {
     font-weight: 900;
+    line-height: 1;
 }
 
 .cell-icon {
-    font-size: 1.3rem;
-    margin-top: 2px;
+    font-size: 0.5rem;
+    margin-top: 1px;
+    line-height: 1;
 }
 
-@media (min-width: 768px) {
-    .cell-icon {
-        font-size: 1.8rem;
-    }
-}
-
-@media (min-width: 768px) {
+@media (min-width: 480px) {
     .cell {
-        font-size: 0.9rem;
+        font-size: 0.5rem;
+        border-radius: 6px;
+        padding: 4px;
     }
     .cell-icon {
-        font-size: 1.3rem;
+        font-size: 0.8rem;
+        margin-top: 2px;
+    }
+}
+
+@media (min-width: 640px) {
+    .cell {
+        font-size: 0.65rem;
+        border-radius: 8px;
+        padding: 6px;
+    }
+    .cell-icon {
+        font-size: 1.1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .board {
+        gap: 4px;
+    }
+    .cell {
+        font-size: 0.85rem;
+    }
+    .cell-icon {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .cell {
+        font-size: 0.95rem;
+    }
+    .cell-icon {
+        font-size: 1.7rem;
     }
 }
 
@@ -233,22 +271,48 @@ body {
    ======================== */
 .player-token {
     position: absolute;
-    width: 40%;
-    height: 40%;
+    width: 35%;
+    height: 35%;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.55rem;
+    font-size: 0.25rem;
     font-weight: bold;
     color: white;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     transition: all 0.2s ease;
     z-index: 10;
 }
 
+@media (min-width: 480px) {
+    .player-token {
+        width: 38%;
+        height: 38%;
+        font-size: 0.35rem;
+    }
+}
+
+@media (min-width: 640px) {
+    .player-token {
+        width: 40%;
+        height: 40%;
+        font-size: 0.5rem;
+    }
+}
+
 @media (min-width: 768px) {
     .player-token {
+        width: 42%;
+        height: 42%;
+        font-size: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .player-token {
+        width: 40%;
+        height: 40%;
         font-size: 0.85rem;
     }
 }
@@ -316,18 +380,48 @@ body {
    DICE
    ======================== */
 .dice {
-    width: 90px;
-    height: 90px;
+    width: 60px;
+    height: 60px;
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-radius: 18px;
+    border-radius: 12px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
-    gap: 7px;
-    padding: 14px;
+    gap: 5px;
+    padding: 10px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
+}
+
+@media (min-width: 480px) {
+    .dice {
+        width: 70px;
+        height: 70px;
+        border-radius: 14px;
+        gap: 6px;
+        padding: 12px;
+    }
+}
+
+@media (min-width: 640px) {
+    .dice {
+        width: 80px;
+        height: 80px;
+        border-radius: 16px;
+        gap: 7px;
+        padding: 13px;
+    }
+}
+
+@media (min-width: 768px) {
+    .dice {
+        width: 90px;
+        height: 90px;
+        border-radius: 18px;
+        gap: 7px;
+        padding: 14px;
+    }
 }
 
 .dice.rolling {
@@ -344,10 +438,31 @@ body {
 }
 
 .dice-dot {
-    width: 16px;
-    height: 16px;
+    width: 10px;
+    height: 10px;
     background: #2d3748;
     border-radius: 50%;
+}
+
+@media (min-width: 480px) {
+    .dice-dot {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (min-width: 640px) {
+    .dice-dot {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+@media (min-width: 768px) {
+    .dice-dot {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 /* ========================
@@ -429,4 +544,17 @@ body {
 @keyframes confettiFall {
     0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
     100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+
+
+@media (max-width: 480px) {
+    .player-card {
+        padding: 8px;
+    }
+    
+    .player-indicator {
+        padding: 8px;
+        font-size: 1rem;
+    }
 }
