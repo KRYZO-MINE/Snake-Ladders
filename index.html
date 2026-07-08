@@ -94,30 +94,44 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Music Controls -->
+                <div class="glass-card p-4 md:p-5">
+                    <h2 class="text-lg md:text-xl font-semibold text-gray-800 mb-3">🎵 Music Controls</h2>
+                    <!-- Current Track -->
+                    <div class="text-center mb-3">
+                        <p id="currentTrackTitle" class="text-sm text-gray-700 truncate">Track 1</p>
+                    </div>
+                    <!-- Playback Controls -->
+                    <div class="flex items-center justify-center gap-2 mb-3">
+                        <button id="prevTrackBtn" class="btn-secondary px-3 py-2 rounded-lg text-sm">
+                            ⏮️
+                        </button>
+                        <button id="playPauseBtn" class="btn-primary px-4 py-2 rounded-xl text-base">
+                            ▶️
+                        </button>
+                        <button id="nextTrackBtn" class="btn-secondary px-3 py-2 rounded-lg text-sm">
+                            ⏭️
+                        </button>
+                        <button id="restartMusicBtn" class="btn-secondary px-3 py-2 rounded-lg text-sm">
+                            🔄
+                        </button>
+                    </div>
+                    <!-- Volume Controls -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-gray-700 text-sm">🔈</span>
+                        <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.5" class="w-full accent-indigo-500">
+                        <span class="text-gray-700 text-sm">🔊</span>
+                    </div>
+                    <div class="text-center text-xs text-gray-600 mt-2">
+                        Volume: <span id="volumeValue">50</span>%
+                    </div>
+                </div>
                 
             </div>
         </div>
 
-        <!-- Floating Music Control Panel -->
-        <div class="fixed bottom-6 right-6 z-40 glass-card p-4 rounded-2xl shadow-xl flex flex-col gap-3 w-64">
-            <h3 class="text-lg font-semibold text-gray-800 text-center">🎵 Music Controls</h3>
-            <div class="flex items-center justify-center gap-3">
-                <button id="playPauseBtn" class="btn-primary px-4 py-2 rounded-xl text-lg">
-                    🔇
-                </button>
-                <button id="restartMusicBtn" class="btn-secondary px-4 py-2 rounded-xl text-lg">
-                    🔄
-                </button>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="text-gray-700 font-medium">🔈</span>
-                <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.5" class="w-full accent-indigo-500">
-                <span class="text-gray-700 font-medium">🔊</span>
-            </div>
-            <div class="text-center text-sm text-gray-600">
-                Volume: <span id="volumeValue">50</span>%
-            </div>
-        </div>
+
 
         <!-- History -->
         <div class="glass-card mt-6 p-4 md:p-5">
